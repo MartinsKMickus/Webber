@@ -116,6 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,10 +141,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Generator.cpp" />
+    <ClCompile Include="UCIcom.cpp" />
+    <ClCompile Include="Valuation.cpp" />
     <ClCompile Include="Webber.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
+    <ClInclude Include="UCIcom.h" />
+    <ClInclude Include="Valuation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

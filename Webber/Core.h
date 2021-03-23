@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <future>
+#include <thread>
+#include <Windows.h>
 
 using namespace std;
 
