@@ -50,7 +50,7 @@ struct ChessPosition
 								   0, 0, 0, 0, 0, 0, 0, 0,
 								   1, 1, 1, 1, 1, 1, 1, 1,
 								   1, 1, 1, 1, 1, 1, 1, 1,
-								   0, 1, 1, 1, 1, 1, 1, 0 },
+								   0, 1, 1, 1, 1, 1, 1, 0 }, ///////////////// Will not be used.
 
 		BAttackedSquares[8][8] = { 0, 1, 1, 1, 1, 1, 1, 0,
 								   1, 1, 1, 1, 1, 1, 1, 1,
@@ -59,10 +59,11 @@ struct ChessPosition
 								   0, 0, 0, 0, 0, 0, 0, 0,
 								   0, 0, 0, 0, 0, 0, 0, 0,
 								   0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, 0, 0, 0, 0 },
+								   0, 0, 0, 0, 0, 0, 0, 0 }, ///////////////// Will not be used.
 		BInCheck = 0, WInCheck = 0, Turn = 1;
 	vector<ChessPosition> NextPositions;
 	ChessPosition* PreviousPosition = NULL;
 	string LastMove;
-	int valuation = 0;
+	int valuation = 0, WKing[2] = { 7,4 }, BKing[2] = { 0,4 };
+	bool WC = true, Wc = true, BC = true, Bc = true;
 };

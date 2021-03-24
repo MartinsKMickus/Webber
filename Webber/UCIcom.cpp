@@ -70,7 +70,7 @@ void UCIcom::Run()
 				if (ExtractFW(input) == "moves")
 				{
 					engine.Reset();
-					for (LastWord = ExtractFW(input); LastWord.size() == 4; LastWord = ExtractFW(input))
+					for (LastWord = ExtractFW(input); LastWord.size() == 4; LastWord = ExtractFW(input)) // Promotion not working yet
 					{
 						engine.Move(LastWord); /////////////////////////
 					}

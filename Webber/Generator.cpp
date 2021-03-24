@@ -312,23 +312,19 @@ public:
 						{
 							if (j + 1 < 8)
 							{
-								if (Positions.ChessBoard[i + 1][j + 1] > 91 || Positions.ChessBoard[y][x] == ' ')
+								if (Positions.ChessBoard[i + 1][j + 1] > 91 || Positions.ChessBoard[i + 1][j + 1] == ' ')
 								{
 									AddNextMove(j, i, j + 1, i + 1);
-								}
-								if (Positions.ChessBoard[i][j + 1] > 91 || Positions.ChessBoard[y][x] == ' ')
-								{
-									AddNextMove(j, i, j + 1, i);
 								}
 							}
 							if (j - 1 >= 0)
 							{
-								if (Positions.ChessBoard[i + 1][j - 1] > 91 || Positions.ChessBoard[y][x] == ' ')
+								if (Positions.ChessBoard[i + 1][j - 1] > 91 || Positions.ChessBoard[i + 1][j - 1] == ' ')
 								{
 									AddNextMove(j, i, j - 1, i + 1);
 								}
 							}
-							if (Positions.ChessBoard[i + 1][j] > 91 || Positions.ChessBoard[y][x] == ' ')
+							if (Positions.ChessBoard[i + 1][j] > 91 || Positions.ChessBoard[i + 1][j] == ' ')
 							{
 								AddNextMove(j, i, j, i + 1);
 							}
@@ -337,29 +333,39 @@ public:
 						{
 							if (j - 1 >= 0)
 							{
-								if (Positions.ChessBoard[i - 1][j - 1] > 91 || Positions.ChessBoard[y][x] == ' ')
+								if (Positions.ChessBoard[i - 1][j - 1] > 91 || Positions.ChessBoard[i - 1][j - 1] == ' ')
 								{
 									AddNextMove(j, i, j - 1, i - 1);
-								}
-								if (Positions.ChessBoard[i][j - 1] > 91 || Positions.ChessBoard[y][x] == ' ')
-								{
-									AddNextMove(j, i, j - 1, i);
 								}
 							}
 							if (j + 1 < 8)
 							{
-								if (Positions.ChessBoard[i - 1][j + 1] > 91 || Positions.ChessBoard[y][x] == ' ')
+								if (Positions.ChessBoard[i - 1][j + 1] > 91 || Positions.ChessBoard[i - 1][j + 1] == ' ')
 								{
 									AddNextMove(j, i, j + 1, i - 1);
 								}
 							}
-							if (Positions.ChessBoard[i - 1][j] > 91 || Positions.ChessBoard[y][x] == ' ')
+							if (Positions.ChessBoard[i - 1][j] > 91 || Positions.ChessBoard[i - 1][j] == ' ')
 							{
 								AddNextMove(j, i, j, i - 1);
 							}
 						}
+						if (j + 1 < 8)
+						{
+							if (Positions.ChessBoard[i][j + 1] > 91 || Positions.ChessBoard[i][j + 1] == ' ')
+							{
+								AddNextMove(j, i, j + 1, i);
+							}
+						}
+						if (j - 1 >= 0)
+						{
+							if (Positions.ChessBoard[i][j - 1] > 91 || Positions.ChessBoard[i][j - 1] == ' ')
+							{
+								AddNextMove(j, i, j - 1, i);
+							}
+						}
 						break;
-					case 'P':
+					case 'P': // En passant still not added.
 						if (yAsis == 6)
 						{
 							if (Positions.ChessBoard[yAsis - 1][xAsis] == ' ' && Positions.ChessBoard[yAsis - 2][xAsis] == ' ')
@@ -660,6 +666,20 @@ public:
 						}
 						break;
 					case 'k':
+						if (Positions.BC)
+						{
+							if (Positions.ChessBoard[0][1] == ' ' && Positions.ChessBoard[0][2] == ' ' && Positions.ChessBoard[0][3] == ' ')
+							{
+
+							}
+						}
+						if (Positions.Bc)
+						{
+							if (Positions.ChessBoard[0][6] == ' ' && Positions.ChessBoard[0][5] == ' ')
+							{
+
+							}
+						}
 						if (i + 1 < 8)
 						{
 							if (j + 1 < 8)
@@ -667,10 +687,6 @@ public:
 								if (Positions.ChessBoard[i + 1][j + 1] < 91)
 								{
 									AddNextMove(j, i, j + 1, i + 1);
-								}
-								if (Positions.ChessBoard[i][j + 1] < 91)
-								{
-									AddNextMove(j, i, j + 1, i);
 								}
 							}
 							if (j - 1 >= 0)
@@ -692,11 +708,7 @@ public:
 								if (Positions.ChessBoard[i - 1][j - 1] < 91)
 								{
 									AddNextMove(j, i, j - 1, i - 1);
-								}
-								if (Positions.ChessBoard[i][j - 1] < 91)
-								{
-									AddNextMove(j, i, j - 1, i);
-								}
+								}	
 							}
 							if (j + 1 < 8)
 							{
@@ -710,8 +722,22 @@ public:
 								AddNextMove(j, i, j, i - 1);
 							}
 						}
+						if (j + 1 < 8)
+						{
+							if (Positions.ChessBoard[i][j + 1] < 91)
+							{
+								AddNextMove(j, i, j + 1, i);
+							}
+						}
+						if (j - 1 >= 0)
+						{
+							if (Positions.ChessBoard[i][j - 1] < 91)
+							{
+								AddNextMove(j, i, j - 1, i);
+							}
+						}
 						break;
-					case 'p':
+					case 'p': // En passant still not added. Promotion not added.
 						if (yAsis == 1)
 						{
 							if (Positions.ChessBoard[yAsis + 1][xAsis] == ' ' && Positions.ChessBoard[yAsis + 2][xAsis] == ' ')
@@ -748,24 +774,29 @@ public:
 			}
 		}
 	}
-	bool KingCheck(ChessPosition CP)
+	bool KingCheck(ChessPosition CP, int j = -1, int i = -1)
 	{
 		int x, y;
 		if (!CP.Turn)
 		{
-			for (int i = 0; i < 8; i++)
+			if (j == -1 || i == -1)
 			{
-				for (int j = 0; j < 8; j++)
-				{
-					if (CP.ChessBoard[i][j] == 'K')
-					{
+				i = CP.WKing[0];
+				j = CP.WKing[1];
+			}
+			//for (int i = 0; i < 8; i++)
+			//{
+				//for (int j = 0; j < 8; j++)
+				//{
+					//if (CP.ChessBoard[i][j] == 'K')
+					//{
 						for (int x = j + 1; x < 8; x++)
 						{
 							if (CP.ChessBoard[i][x] == 'q' || CP.ChessBoard[i][x] == 'r')
 							{
 								return true; //////////////////
 							}
-							else if (41 < CP.ChessBoard[i][x] < 91) break;
+							else if (CP.ChessBoard[i][x] < 91 && CP.ChessBoard[i][x] != ' ') break;
 						}
 						for (int x = j - 1; x >= 0; x--)
 						{
@@ -773,7 +804,7 @@ public:
 							{
 								return true;
 							}
-							else if (41 < CP.ChessBoard[i][x] < 91) break;
+							else if (CP.ChessBoard[i][x] < 91 && CP.ChessBoard[i][x] != ' ') break;
 						}
 						for (int y = i + 1; y < 8; y++)
 						{
@@ -781,7 +812,7 @@ public:
 							{
 								return true;
 							}
-							else if (41 < CP.ChessBoard[y][j] < 91) break;
+							else if (CP.ChessBoard[y][j] < 91 && CP.ChessBoard[y][j] != ' ') break;
 						}
 						for (int y = i - 1; y >= 0; y--)
 						{
@@ -789,7 +820,7 @@ public:
 							{
 								return true;
 							}
-							else if (41 < CP.ChessBoard[y][j] < 91) break;
+							else if (CP.ChessBoard[y][j] < 91 && CP.ChessBoard[y][j] != ' ') break;
 						}
 						x = j + 1;
 						y = i + 1;
@@ -799,7 +830,7 @@ public:
 							{
 								return true;
 							}
-							else if (41 < CP.ChessBoard[y][x] < 91) break;
+							else if (CP.ChessBoard[y][x] < 91 && CP.ChessBoard[y][x] != ' ') break;
 							x++;
 							y++;
 						}
@@ -811,7 +842,7 @@ public:
 							{
 								return true;
 							}
-							else if (41 < CP.ChessBoard[y][x] < 91) break;
+							else if (CP.ChessBoard[y][x] < 91 && CP.ChessBoard[y][x] != ' ') break;
 							x--;
 							y--;
 						}
@@ -823,7 +854,7 @@ public:
 							{
 								return true;
 							}
-							else if (41 < CP.ChessBoard[y][x] < 91) break;
+							else if (CP.ChessBoard[y][x] < 91 && CP.ChessBoard[y][x] != ' ') break;
 							x--;
 							y++;
 						}
@@ -835,7 +866,7 @@ public:
 							{
 								return true;
 							}
-							else if (41 < CP.ChessBoard[y][x] < 91) break;
+							else if (CP.ChessBoard[y][x] < 91 && CP.ChessBoard[y][x] != ' ') break;
 							x++;
 							y--;
 						}
@@ -924,18 +955,73 @@ public:
 								}
 							}
 						}
-					}
-				}
-			}
+						if (i + 1 < 8) ///////////////////////////////////////////////////////////////////////
+						{
+							if (j + 1 < 8)
+							{
+								if (CP.ChessBoard[i + 1][j + 1] == 'k')
+								{
+									return true;
+								}
+								if (CP.ChessBoard[i][j + 1] == 'k')
+								{
+									return true;
+								}
+							}
+							if (j - 1 >= 0)
+							{
+								if (CP.ChessBoard[i + 1][j - 1] == 'k')
+								{
+									return true;
+								}
+							}
+							if (CP.ChessBoard[i + 1][j] == 'k')
+							{
+								return true;
+							}
+						}
+						if (i - 1 >= 0)
+						{
+							if (j - 1 >= 0)
+							{
+								if (CP.ChessBoard[i - 1][j - 1] == 'k')
+								{
+									return true;
+								}
+								if (CP.ChessBoard[i][j - 1] == 'k')
+								{
+									return true;
+								}
+							}
+							if (j + 1 < 8)
+							{
+								if (CP.ChessBoard[i - 1][j + 1] == 'k')
+								{
+									return true;
+								}
+							}
+							if (CP.ChessBoard[i - 1][j] == 'k')
+							{
+								return true;
+							}
+						}
+					//}
+				//}
+			//}
 		}
 		else
 		{
-			for (int i = 0; i < 8; i++)
-			{
-				for (int j = 0; j < 8; j++)
-				{
-					if (CP.ChessBoard[i][j] == 'k')
-					{
+		if (j == -1 || i == -1)
+		{
+			i = CP.BKing[0];
+			j = CP.BKing[1];
+		}
+			//for (int i = 0; i < 8; i++)
+			//{
+				//for (int j = 0; j < 8; j++)
+				//{
+					//if (CP.ChessBoard[i][j] == 'k')
+					//{
 						for (int x = j + 1; x < 8; x++)
 						{
 							if (CP.ChessBoard[i][x] == 'Q' || CP.ChessBoard[i][x] == 'R')
@@ -1101,20 +1187,84 @@ public:
 								}
 							}
 						}
-					}
-				}
-			}
+						if (i + 1 < 8)
+						{
+							if (j + 1 < 8)
+							{
+								if (CP.ChessBoard[i + 1][j + 1] == 'K')
+								{
+									return true;
+								}
+								if (CP.ChessBoard[i][j + 1] == 'K')
+								{
+									return true;
+								}
+							}
+							if (j - 1 >= 0)
+							{
+								if (CP.ChessBoard[i + 1][j - 1] == 'K')
+								{
+									return true;
+								}
+							}
+							if (CP.ChessBoard[i + 1][j] == 'K')
+							{
+								return true;
+							}
+						}
+						if (i - 1 >= 0)
+						{
+							if (j - 1 >= 0)
+							{
+								if (CP.ChessBoard[i - 1][j - 1] == 'K')
+								{
+									return true;
+								}
+								if (CP.ChessBoard[i][j - 1] == 'K')
+								{
+									return true;
+								}
+							}
+							if (j + 1 < 8)
+							{
+								if (CP.ChessBoard[i - 1][j + 1] == 'K')
+								{
+									return true;
+								}
+							}
+							if (CP.ChessBoard[i - 1][j] == 'K')
+							{
+								return true;
+							}
+						}
+					//}
+				//}
+			//}
 		}
 		return false;
 	}
-	void AddNextMove(int x, int y, int x1, int y1) ///////////////////////////////////// No check on checked king.
+	void AddNextMove(int x, int y, int x1, int y1)
 	{
 		ChessPosition tempPos = *CurrentPos;
 		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
 		tempPos.ChessBoard[y][x] = ' ';
-		if (CurrentPos->Turn) tempPos.Turn = false;
+		if (tempPos.ChessBoard[y1][x1] == 'k')
+		{
+			tempPos.BKing[0] = y1;
+			tempPos.BKing[1] = x1;
+			tempPos.BC = false;
+			tempPos.Bc = false;
+		}
+		else if (tempPos.ChessBoard[y1][x1] == 'K')
+		{
+			tempPos.WKing[0] = y1;
+			tempPos.WKing[1] = x1;
+			tempPos.WC = false;
+			tempPos.Wc = false;
+		}
+		if (CurrentPos->Turn) tempPos.Turn = false; ////////////////////////////////////////////
 		else tempPos.Turn = true;
-		if (!KingCheck(tempPos))
+		if (!KingCheck(tempPos)) // Check if king is in check.
 		{
 			tempPos.NextPositions.clear();
 			string a = { char(x + 97), char(8 - y + 48), char(x1 + 97), char(8 - y1 + 48) };
@@ -1122,7 +1272,72 @@ public:
 			tempPos.PreviousPosition = CurrentPos;
 			CurrentPos->NextPositions.emplace_back(tempPos);
 		}
-
+	}
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="opt">0 - Black Long, 1 - Black Short, 2 - White Long, 3 - White Short</param>
+	void AddNextMoveCas(int opt)
+	{
+		
+		int RX, RY, KX, KY, RXTo, RYTo, KXTo, KYTo;
+		string Move;
+		ChessPosition tempPos = *CurrentPos;
+		tempPos.Turn = !CurrentPos->Turn;
+		if (KingCheck(tempPos)) return;
+		switch (opt)
+		{
+		case 0:
+			RX = 0, RY = 0, KX = 4, KY = 0, RXTo = 3, RYTo = 0, KXTo = 2, KYTo = 0;
+			Move = "e8c8";
+			if (KingCheck(tempPos, 1, 0)) return;
+			if (KingCheck(tempPos, 3, 0)) return;
+			tempPos.BC = false;
+			tempPos.Bc = false;
+			tempPos.BKing[0] = 0;
+			tempPos.BKing[1] = 2;
+			break;
+		case 1:
+			RX = 7, RY = 0, KX = 4, KY = 0, RXTo = 5, RYTo = 0, KXTo = 6, KYTo = 0;
+			Move = "e8g8";
+			if (KingCheck(tempPos, 5, 0)) return;
+			tempPos.BC = false;
+			tempPos.Bc = false;
+			tempPos.BKing[0] = 0;
+			tempPos.BKing[1] = 6;
+			break;
+		case 2:
+			RX = 0, RY = 7, KX = 4, KY = 7, RXTo = 3, RYTo = 7, KXTo = 2, KYTo = 7;
+			Move = "e1c1";
+			if (KingCheck(tempPos, 1, 7)) return;
+			if (KingCheck(tempPos, 3, 7)) return;
+			tempPos.WC = false;
+			tempPos.Wc = false;
+			tempPos.WKing[0] = 7;
+			tempPos.WKing[1] = 2;
+			break;
+		case 3:
+			RX = 7, RY = 7, KX = 4, KY = 7, RXTo = 5, RYTo = 7, KXTo = 6, KYTo = 7;
+			Move = "e1g1";
+			if (KingCheck(tempPos, 5, 7)) return;
+			tempPos.WC = false;
+			tempPos.Wc = false;
+			tempPos.WKing[0] = 7;
+			tempPos.WKing[1] = 6;
+			break;
+		default:
+			return;
+		}
+		 ///////////////////////////////////////////
+		if (KingCheck(tempPos)) return;
+		tempPos.ChessBoard[RYTo][RXTo] = tempPos.ChessBoard[RY][RX];
+		tempPos.ChessBoard[RY][RX] = ' ';
+		tempPos.ChessBoard[KYTo][KXTo] = tempPos.ChessBoard[KY][KX];
+		tempPos.ChessBoard[KY][KX] = ' ';
+		tempPos.NextPositions.clear();
+		tempPos.LastMove = Move;
+		tempPos.PreviousPosition = CurrentPos;
+		CurrentPos->NextPositions.emplace_back(tempPos);
 	}
 	string GetMove()  //////////////////////////////////////
 	{
