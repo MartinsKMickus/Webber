@@ -96,5 +96,10 @@ void UCIcom::Run()
 		{
 			engine.DiagnosticPrint();
 		}
+		else
+		{
+			cout << "Wrong command!\n";
+			input.erase();
+		}
 	}
 }
