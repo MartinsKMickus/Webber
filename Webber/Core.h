@@ -65,5 +65,5 @@ struct ChessPosition
 	ChessPosition* PreviousPosition = NULL;
 	string LastMove;
 	int valuation = 0, WKing[2] = { 7,4 }, BKing[2] = { 0,4 };
-	bool WC = true, Wc = true, BC = true, Bc = true;
+	bool WC = true, Wc = true, BC = true, Bc = true, EnPass = false;
 };
