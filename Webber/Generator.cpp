@@ -308,6 +308,20 @@ public:
 						}
 						break;
 					case 'K':
+						if (Positions.WC)
+						{
+							if (Positions.ChessBoard[7][1] == ' ' && Positions.ChessBoard[7][2] == ' ' && Positions.ChessBoard[7][3] == ' ')
+							{
+								AddNextMoveCas(2);
+							}
+						}
+						if (Positions.Wc)
+						{
+							if (Positions.ChessBoard[7][6] == ' ' && Positions.ChessBoard[7][5] == ' ')
+							{
+								AddNextMoveCas(3);
+							}
+						}
 						if (i + 1 < 8)
 						{
 							if (j + 1 < 8)
@@ -365,7 +379,7 @@ public:
 							}
 						}
 						break;
-					case 'P': // En passant still not added.
+					case 'P':
 						if (yAsis == 6)
 						{
 							if (Positions.ChessBoard[yAsis - 1][xAsis] == ' ' && Positions.ChessBoard[yAsis - 2][xAsis] == ' ')
@@ -373,7 +387,7 @@ public:
 								AddNextMove(j, i, j, i - 2);
 							}
 						}
-						if (yAsis - 1 >= 0)
+						if (yAsis > 1)
 						{
 							if (Positions.ChessBoard[yAsis - 1][xAsis] == ' ')
 							{
@@ -381,17 +395,41 @@ public:
 							}
 							if (xAsis + 1 < 8)
 							{
-								if (Positions.ChessBoard[yAsis - 1][xAsis + 1] > 91 && Positions.ChessBoard[yAsis - 1][xAsis + 1] != ' ')
+								if (Positions.ChessBoard[yAsis - 1][xAsis + 1] > 91 && Positions.ChessBoard[yAsis - 1][xAsis + 1] != ' ') //////////////////
 								{
 									AddNextMove(j, i, j + 1, i - 1);
+								}
+								if (Positions.EnPass)
+								{
+									if (yAsis == 3 && Positions.ChessBoard[yAsis][xAsis + 1] > 91)
+									{
+										AddNextMoveEnPassant(j, i, j + 1, i - 1);
+									}
 								}
 							}
 							if (xAsis - 1 >= 0)
 							{
-								if (Positions.ChessBoard[yAsis - 1][xAsis - 1] > 91 && Positions.ChessBoard[yAsis - 1][xAsis - 1] != ' ')
+								if (Positions.ChessBoard[yAsis - 1][xAsis - 1] > 91 && Positions.ChessBoard[yAsis - 1][xAsis - 1] != ' ') /////////////////
 								{
 									AddNextMove(j, i, j - 1, i - 1);
 								}
+								if (Positions.EnPass)
+								{
+									if (yAsis == 3 && Positions.ChessBoard[yAsis][xAsis - 1] > 91)
+									{
+										AddNextMoveEnPassant(j, i, j - 1, i - 1);
+									}
+								}
+							}
+						}
+						if (yAsis == 1)
+						{
+							if (Positions.ChessBoard[yAsis - 1][xAsis] == ' ')
+							{
+								AddNextMoveProm(j, i, j, i - 1, 'Q');
+								AddNextMoveProm(j, i, j, i - 1, 'R');
+								AddNextMoveProm(j, i, j, i - 1, 'B');
+								AddNextMoveProm(j, i, j, i - 1, 'N');
 							}
 						}
 						break;
@@ -670,14 +708,14 @@ public:
 						{
 							if (Positions.ChessBoard[0][1] == ' ' && Positions.ChessBoard[0][2] == ' ' && Positions.ChessBoard[0][3] == ' ')
 							{
-
+								AddNextMoveCas(0);
 							}
 						}
 						if (Positions.Bc)
 						{
 							if (Positions.ChessBoard[0][6] == ' ' && Positions.ChessBoard[0][5] == ' ')
 							{
-
+								AddNextMoveCas(1);
 							}
 						}
 						if (i + 1 < 8)
@@ -737,7 +775,7 @@ public:
 							}
 						}
 						break;
-					case 'p': // En passant still not added. Promotion not added.
+					case 'p':
 						if (yAsis == 1)
 						{
 							if (Positions.ChessBoard[yAsis + 1][xAsis] == ' ' && Positions.ChessBoard[yAsis + 2][xAsis] == ' ')
@@ -745,7 +783,7 @@ public:
 								AddNextMove(j, i, j, i + 2);
 							}
 						}
-						if (yAsis + 1 < 8)
+						if (yAsis < 6)
 						{
 							if (Positions.ChessBoard[yAsis + 1][xAsis] == ' ')
 							{
@@ -757,6 +795,13 @@ public:
 								{
 									AddNextMove(j, i, j + 1, i + 1);
 								}
+								if (Positions.EnPass)
+								{
+									if (yAsis == 4 && Positions.ChessBoard[yAsis][xAsis + 1] < 91 && Positions.ChessBoard[yAsis][xAsis + 1] != ' ')
+									{
+										AddNextMoveEnPassant(j, i, j + 1, i + 1);///////////////////////////// En passant
+									}
+								}
 							}
 							if (xAsis - 1 >= 0)
 							{
@@ -764,6 +809,23 @@ public:
 								{
 									AddNextMove(j, i, j - 1, i + 1);
 								}
+								if (Positions.EnPass)
+								{
+									if (yAsis == 4 && Positions.ChessBoard[yAsis][xAsis - 1] < 91 && Positions.ChessBoard[yAsis][xAsis - 1] != ' ')
+									{
+										AddNextMoveEnPassant(j, i, j - 1, i + 1);
+									}
+								}
+							}
+						}
+						if (yAsis == 6)
+						{
+							if (Positions.ChessBoard[yAsis + 1][xAsis] == ' ')
+							{
+								AddNextMoveProm(j, i, j, i + 1, 'q');
+								AddNextMoveProm(j, i, j, i + 1, 'r');
+								AddNextMoveProm(j, i, j, i + 1, 'b');
+								AddNextMoveProm(j, i, j, i + 1, 'n');
 							}
 						}
 						break;
@@ -790,37 +852,37 @@ public:
 				//{
 					//if (CP.ChessBoard[i][j] == 'K')
 					//{
-						for (int x = j + 1; x < 8; x++)
+						for (x = j + 1; x < 8; x++)
 						{
 							if (CP.ChessBoard[i][x] == 'q' || CP.ChessBoard[i][x] == 'r')
 							{
 								return true; //////////////////
 							}
-							else if (CP.ChessBoard[i][x] < 91 && CP.ChessBoard[i][x] != ' ') break;
+							else if (CP.ChessBoard[i][x] != ' ') break;
 						}
-						for (int x = j - 1; x >= 0; x--)
+						for (x = j - 1; x >= 0; x--)
 						{
 							if (CP.ChessBoard[i][x] == 'q' || CP.ChessBoard[i][x] == 'r')
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[i][x] < 91 && CP.ChessBoard[i][x] != ' ') break;
+							else if (CP.ChessBoard[i][x] != ' ') break;
 						}
-						for (int y = i + 1; y < 8; y++)
+						for (y = i + 1; y < 8; y++)
 						{
 							if (CP.ChessBoard[y][j] == 'q' || CP.ChessBoard[y][j] == 'r')
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][j] < 91 && CP.ChessBoard[y][j] != ' ') break;
+							else if (CP.ChessBoard[y][j] != ' ') break;
 						}
-						for (int y = i - 1; y >= 0; y--)
+						for (y = i - 1; y >= 0; y--)
 						{
 							if (CP.ChessBoard[y][j] == 'q' || CP.ChessBoard[y][j] == 'r')
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][j] < 91 && CP.ChessBoard[y][j] != ' ') break;
+							else if (CP.ChessBoard[y][j] != ' ') break;
 						}
 						x = j + 1;
 						y = i + 1;
@@ -830,7 +892,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][x] < 91 && CP.ChessBoard[y][x] != ' ') break;
+							else if (CP.ChessBoard[y][x] != ' ') break;
 							x++;
 							y++;
 						}
@@ -842,7 +904,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][x] < 91 && CP.ChessBoard[y][x] != ' ') break;
+							else if (CP.ChessBoard[y][x] != ' ') break;
 							x--;
 							y--;
 						}
@@ -854,7 +916,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][x] < 91 && CP.ChessBoard[y][x] != ' ') break;
+							else if (CP.ChessBoard[y][x] != ' ') break;
 							x--;
 							y++;
 						}
@@ -866,7 +928,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][x] < 91 && CP.ChessBoard[y][x] != ' ') break;
+							else if (CP.ChessBoard[y][x] != ' ') break;
 							x++;
 							y--;
 						}
@@ -1022,7 +1084,7 @@ public:
 				//{
 					//if (CP.ChessBoard[i][j] == 'k')
 					//{
-						for (int x = j + 1; x < 8; x++)
+						for (x = j + 1; x < 8; x++)
 						{
 							if (CP.ChessBoard[i][x] == 'Q' || CP.ChessBoard[i][x] == 'R')
 							{
@@ -1030,7 +1092,7 @@ public:
 							}
 							else if (CP.ChessBoard[i][x] > 91) break;
 						}
-						for (int x = j - 1; x >= 0; x--)
+						for (x = j - 1; x >= 0; x--)
 						{
 							if (CP.ChessBoard[i][x] == 'Q' || CP.ChessBoard[i][x] == 'R')
 							{
@@ -1038,7 +1100,7 @@ public:
 							}
 							else if (CP.ChessBoard[i][x] > 91) break;
 						}
-						for (int y = i + 1; y < 8; y++)
+						for (y = i + 1; y < 8; y++)
 						{
 							if (CP.ChessBoard[y][j] == 'Q' || CP.ChessBoard[y][j] == 'R')
 							{
@@ -1046,7 +1108,7 @@ public:
 							}
 							else if (CP.ChessBoard[y][j] > 91) break;
 						}
-						for (int y = i - 1; y >= 0; y--)
+						for (y = i - 1; y >= 0; y--)
 						{
 							if (CP.ChessBoard[y][j] == 'Q' || CP.ChessBoard[y][j] == 'R')
 							{
@@ -1247,20 +1309,48 @@ public:
 	{
 		ChessPosition tempPos = *CurrentPos;
 		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
+		if (tempPos.ChessBoard[y][x] == 'r') //////////////////////// Can be placed in special function
+		{
+			
+			if (x == 0 && y == 0)
+			{
+				tempPos.BC = false;
+			}
+			if (x == 7 && y == 0)
+			{
+				tempPos.Bc = false;
+			}
+		}
+		else if (tempPos.ChessBoard[y][x] == 'R') //////////////////////// Can be placed in special function
+		{
+			if (x == 0 && y == 7)
+			{
+				tempPos.WC = false;
+			}
+			if (x == 7 && y == 7)
+			{
+				tempPos.Wc = false;
+			}
+		}
 		tempPos.ChessBoard[y][x] = ' ';
-		if (tempPos.ChessBoard[y1][x1] == 'k')
+		tempPos.EnPass = false;
+		if (tempPos.ChessBoard[y1][x1] == 'k') //////////////////////// Can be placed in special function
 		{
 			tempPos.BKing[0] = y1;
 			tempPos.BKing[1] = x1;
 			tempPos.BC = false;
 			tempPos.Bc = false;
 		}
-		else if (tempPos.ChessBoard[y1][x1] == 'K')
+		else if (tempPos.ChessBoard[y1][x1] == 'K') //////////////////////// Can be placed in special function
 		{
 			tempPos.WKing[0] = y1;
 			tempPos.WKing[1] = x1;
 			tempPos.WC = false;
 			tempPos.Wc = false;
+		}
+		else if ((y - y1 == 2 || y - y1 == -2) && (tempPos.ChessBoard[y1][x1] == 'p' || tempPos.ChessBoard[y1][x1] == 'P'))
+		{
+			tempPos.EnPass = true;
 		}
 		if (CurrentPos->Turn) tempPos.Turn = false; ////////////////////////////////////////////
 		else tempPos.Turn = true;
@@ -1339,6 +1429,44 @@ public:
 		tempPos.PreviousPosition = CurrentPos;
 		CurrentPos->NextPositions.emplace_back(tempPos);
 	}
+	void AddNextMoveEnPassant(int x, int y, int x1, int y1)
+	{
+		ChessPosition tempPos = *CurrentPos;
+		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
+		tempPos.ChessBoard[y][x] = ' ';
+		tempPos.ChessBoard[y][x1] = ' ';
+		tempPos.EnPass = false;
+		if (CurrentPos->Turn) tempPos.Turn = false; ////////////////////////////////////////////
+		else tempPos.Turn = true;
+		if (!KingCheck(tempPos)) // Check if king is in check.
+		{
+			tempPos.NextPositions.clear();
+			string a = { char(x + 97), char(8 - y + 48), char(x1 + 97), char(8 - y1 + 48) };
+			tempPos.LastMove = a;
+			tempPos.PreviousPosition = CurrentPos;
+			CurrentPos->NextPositions.emplace_back(tempPos);
+		}
+	}
+	void AddNextMoveProm(int x, int y, int x1, int y1, char Fig)
+	{
+		ChessPosition tempPos = *CurrentPos;
+		tempPos.ChessBoard[y1][x1] = Fig;
+		tempPos.ChessBoard[y][x] = ' ';
+		if (CurrentPos->Turn)
+		{
+			tempPos.Turn = false; ////////////////////////////////////////////
+			Fig += 32;
+		}
+		else tempPos.Turn = true;
+		if (!KingCheck(tempPos)) // Check if king is in check.
+		{
+			tempPos.NextPositions.clear();
+			string a = { char(x + 97), char(8 - y + 48), char(x1 + 97), char(8 - y1 + 48), Fig };
+			tempPos.LastMove = a;
+			tempPos.PreviousPosition = CurrentPos;
+			CurrentPos->NextPositions.emplace_back(tempPos);
+		}
+	}
 	string GetMove()  //////////////////////////////////////
 	{
 		if (CurrentPos->NextPositions.size() == 0) // If there are no next positions those needs to be calculated
@@ -1351,9 +1479,6 @@ public:
 			srand(time(NULL));
 			auto r = rand() % CurrentPos->NextPositions.size();
 			tempMove = CurrentPos->NextPositions[r].LastMove;
-			//CurrentPos = &CurrentPos->NextPositions[r];
-			//CurrentPos->LastMove = tempMove;
-			//CurrentPos->NextPositions.clear();
 		}
 		return tempMove;
 	}
@@ -1371,9 +1496,6 @@ public:
 				return;
 			}
 		}
-			//CurrentPos.ChessBoard[7 - (Move[3] - 49)][Move[2] - 97] = CurrentPos.ChessBoard[7 - (Move[1] - 49)][Move[0] - 97];
-			//CurrentPos.ChessBoard[7 - (Move[1] - 49)][Move[0] - 97] = ' ';
-			//CurrentPos.Turn = 0;
 	}
 	void Reset()
 	{

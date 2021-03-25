@@ -1,0 +1,35 @@
+[Event "Computer chess game"]
+[Site "MARTINS-PC"]
+[Date "2021.03.25"]
+[Round "?"]
+[White "Webber(Sln)"]
+[Black "Webber(Sln)"]
+[Result "1-0"]
+[BlackElo "0"]
+[ECO "A00"]
+[Opening "Amar (Paris) Opening"]
+[Time "09:29:23"]
+[WhiteElo "0"]
+[TimeControl "0+1"]
+[Termination "normal"]
+[PlyCount "189"]
+[WhiteType "program"]
+[BlackType "program"]
+
+1. Nh3 Nh6 2. e4 Rg8 3. Qf3 f5 4. Qxf5 d5 5. Qe6 Bd7 6. Qf7+ Kxf7 7. Bc4 e5
+8. Bd3 Rh8 9. Ng5+ Ke8 10. Bb5 Bb4 11. h3 Bf8 12. d4 a5 13. Be2 Ba3 14.
+Nxa3 Qe7 15. g3 Qf8 16. Bc4 Bg4 17. Bf1 dxe4 18. Be3 Nf7 19. Nb1 Qb4+ 20.
+Bd2 Bh5 21. Bd3 exd3 22. Bc3 dxc2 23. h4 Nc6 24. Nxh7 Kd8 25. b3 Qa4 26. f3
+Rg8 27. f4 Kd7 28. Bxa5 Rgf8 29. fxe5 Nfxe5 30. Bb6 Ra5 31. Kd2 Nd3 32. b4
+Rff5 33. Rg1 Be2 34. Rd1 Rad5 35. Ba7 Ne7 36. b5 Nf4 37. Na3 Qa6 38. Bb8
+Rf8 39. Ba7 Bf1 40. Rxf1 c5 41. gxf4 Rxd4+ 42. Kxc2 Qg6+ 43. Kb2 Rd6 44.
+Nc4 Qe6 45. Kc2 Qf5+ 46. Kb2 Qf7 47. Rad1 Re8 48. Rg1 Rd5 49. Rg5 Qf8 50.
+Rd3 Nc6 51. Rg4 Re2+ 52. Ka3 Qd8 53. Bb6 Rxd3+ 54. Ka4 Ke7 55. Rg1 Qh8 56.
+Rh1 Ke8 57. Nd2 g6 58. Ng5 Qh5 59. Ngf3 Ree3 60. Ne5 Qf5 61. Bd8 Qe4+ 62.
+Ndc4 Rd1 63. b6 Rde1 64. Nxg6 Rh3 65. Bf6 Rb3 66. Bd8 Qe7 67. axb3 Ra1+ 68.
+Rxa1 Qxd8 69. Rd1 Na7 70. Rd2 Qc8 71. Rc2 Kd7 72. h5 Kd8 73. Rc3 Qf5 74.
+Nd6 Nc8 75. Nxc8 Qd7+ 76. Ka5 Qc7 77. Rc2 Qe7 78. Kb5 Qe5 79. f5 c4+ 80.
+Kxc4 Qa5 81. Nf4 Qe1 82. Rh2 Qb4+ 83. Kd5 Qxf4 84. Ne7 Qd2+ 85. Kc4 Qh6 86.
+Kd4 Qf6+ 87. Ke4 Qg5 88. Ng6 Qh4+ 89. Ke3 Qxh2 90. h6 Qf4+ 91. Nxf4 Kc8 92.
+Ke2 Kb8 93. Kd3 Kc8 94. h7 Kb8 95. h8=Q# 1-0
+
