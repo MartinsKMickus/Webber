@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Generator.h" />
     <ClInclude Include="UCIcom.h" />
     <ClInclude Include="Valuation.h" />
   </ItemGroup>

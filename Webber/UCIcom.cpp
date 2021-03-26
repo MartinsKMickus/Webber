@@ -1,10 +1,7 @@
-#pragma once
 #include "UCIcom.h"
-#include <string>
+#include "Valuation.h"
 
-//UCIcom::UCIcom()
-//{
-//}
+atomic<bool> ExitThreadFlag1 = false;
 
 string UCIcom::ExtractFW(string& line)
 {
@@ -35,12 +32,62 @@ string GetBestMoveInfinite(PositionGenerator PG)
 	
 	return PG.GetMove();
 }
-void GetBestMoveTime(PositionGenerator PG, int ms)
+void GetBestMoveTime(PositionGenerator& PG, string& bMove)
 {
-	//Sleep(ms);
-	cout << "bestmove " << PG.GetMove() << "\n";
+	Valuation v(PG);
+	//int temp = -1000;
+	for (int i = 0; i < 4; i++)
+	{
+		v.TimeAnalysis(i);
+	}
+	
+	bMove = PG.GetMove();
+	cout << "info score cp ";
+	if (PG.CurrentPos->Turn) cout << PG.CurrentPos->valuation;
+	else cout << -PG.CurrentPos->valuation;
+	cout << "\n";
 }
+void GetBestMoveDepth(PositionGenerator& PG, string& bMove, int depth)
+{
+	Valuation v(PG);
+	//int temp = -1000;
+	for (int i = 0; i < depth; i++)
+	{
+		v.TimeAnalysis(i);
+	}
 
+	bMove = PG.GetMove();
+	cout << "info score cp ";
+	if (PG.CurrentPos->Turn) cout << PG.CurrentPos->valuation;
+	else cout << -PG.CurrentPos->valuation;
+	cout << "\n";
+}
+void CallAnalyseWait(PositionGenerator& PG, int ms)
+{
+	
+	string bMove;
+	thread t2(GetBestMoveTime, ref(PG), ref(bMove));
+	
+	Sleep(ms);
+	//ExitThreadFlag1 = true;
+	t2.join();
+	//ExitThreadFlag1 = false;
+	cout << "bestmove " << bMove << "\n";
+	
+}
+void CallAnalyseDepth(PositionGenerator& PG, int depth)
+{
+
+	string bMove;
+	thread t2(GetBestMoveDepth, ref(PG), ref(bMove), depth);
+
+	//Sleep(ms);
+	//ExitThreadFlag1 = true;
+	t2.join();
+	//ExitThreadFlag1 = false;
+	cout << "bestmove " << bMove << "\n";
+
+}
 void UCIcom::Run()
 {
 	while (true)
@@ -83,10 +130,19 @@ void UCIcom::Run()
 		}
 		else if (LastWord == "go")
 		{
-			if (ExtractFW(input) == "movetime")
+			LastWord = ExtractFW(input);
+			if (LastWord == "movetime")
 			{
 				int time = stoi(ExtractFW(input));
-				thread t1(GetBestMoveTime, ref(engine), time);
+				
+				thread t1(CallAnalyseWait, ref(engine), time);
+				t1.join();
+			}
+			else if (LastWord == "depth")
+			{
+				int depth = stoi(ExtractFW(input));
+
+				thread t1(CallAnalyseDepth, ref(engine), depth);
 				t1.join();
 			}
 			//thread t1(engine.GetMove());
@@ -95,6 +151,14 @@ void UCIcom::Run()
 		else if (LastWord == "Diag")
 		{
 			engine.DiagnosticPrint();
+		}
+		else if (LastWord == "stop")
+		{
+			
+		}
+		else if (LastWord == "quit")
+		{
+			return;
 		}
 		else
 		{

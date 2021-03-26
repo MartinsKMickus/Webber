@@ -1,11 +1,10 @@
+#include "Core.h"
 #include "UCIcom.h"
-
-//using namespace std;
 
 int main()
 {
 
-	cout << "Hello Webber is greeting You!" << endl;
+	cout << "Hello Webber is greeting You!\n";
 	UCIcom ucicom;
 	ucicom.Run();
 
