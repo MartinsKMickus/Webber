@@ -383,14 +383,14 @@
 						{
 							if (Positions.ChessBoard[yAsis - 1][xAsis] == ' ' && Positions.ChessBoard[yAsis - 2][xAsis] == ' ')
 							{
-								AddNextMove(j, i, j, i - 2);
+								AddNextMovePawn(j, i, j, i - 2);
 							}
 						}
 						if (yAsis > 1)
 						{
 							if (Positions.ChessBoard[yAsis - 1][xAsis] == ' ')
 							{
-								AddNextMove(j, i, j, i - 1);
+								AddNextMovePawn(j, i, j, i - 1);
 							}
 							if (xAsis + 1 < 8)
 							{
@@ -779,14 +779,14 @@
 						{
 							if (Positions.ChessBoard[yAsis + 1][xAsis] == ' ' && Positions.ChessBoard[yAsis + 2][xAsis] == ' ')
 							{
-								AddNextMove(j, i, j, i + 2);
+								AddNextMovePawn(j, i, j, i + 2);
 							}
 						}
 						if (yAsis < 6)
 						{
 							if (Positions.ChessBoard[yAsis + 1][xAsis] == ' ')
 							{
-								AddNextMove(j, i, j, i + 1);
+								AddNextMovePawn(j, i, j, i + 1);
 							}
 							if (xAsis + 1 < 8)
 							{
@@ -1384,6 +1384,28 @@
 			tempPos.Wc = false;
 		}
 		else if ((y - y1 == 2 || y - y1 == -2) && (tempPos.ChessBoard[y1][x1] == 'p' || tempPos.ChessBoard[y1][x1] == 'P'))
+		{
+			tempPos.EnPass = true;
+		}
+		//if (CurrentPos->Turn) tempPos.Turn = false; ////////////////////////////////////////////
+		tempPos.Turn = !CurrentPos->Turn;
+		if (!KingCheck(tempPos)) // Check if king is in check.
+		{
+			tempPos.NextPositions.clear();
+			string a = { char(x + 97), char(8 - y + 48), char(x1 + 97), char(8 - y1 + 48) };
+			tempPos.LastMove = a;
+			tempPos.PreviousPosition = CurrentPos;
+			CurrentPos->NextPositions.emplace_back(tempPos);
+		}
+	}
+	void PositionGenerator::AddNextMovePawn(int x, int y, int x1, int y1)
+	{
+		ChessPosition tempPos = *CurrentPos;
+		char Fig = tempPos.ChessBoard[y1][x1];
+		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
+		tempPos.ChessBoard[y][x] = ' ';
+		tempPos.EnPass = false;
+		if ((y - y1 == 2 || y - y1 == -2))
 		{
 			tempPos.EnPass = true;
 		}

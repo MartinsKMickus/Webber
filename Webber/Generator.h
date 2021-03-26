@@ -9,6 +9,7 @@ public:
 	void GenerateNextLevel();
 	bool KingCheck(ChessPosition CP, int j, int i);
 	void AddNextMove(int x, int y, int x1, int y1);
+	void AddNextMovePawn(int x, int y, int x1, int y1);
 	void AddNextMoveCas(int opt);
 	void AddNextMoveEnPassant(int x, int y, int x1, int y1);
 	void AddNextMoveProm(int x, int y, int x1, int y1, char Fig);

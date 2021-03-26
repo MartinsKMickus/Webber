@@ -1,5 +1,6 @@
 #include "UCIcom.h"
 #include "Valuation.h"
+#include <string>
 
 atomic<bool> ExitThreadFlag1 = false;
 
