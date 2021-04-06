@@ -1,28 +1,41 @@
-#pragma once
-#include "core.h"
+#include "Generator.h"
 
-class PositionGenerator
-{
-public:
-	PositionGenerator()
+
+	PositionGenerator::PositionGenerator()
 	{
 		CurrentPos = new ChessPosition();
 		Start = CurrentPos;
+		ReferencePos = CurrentPos;
 		GenerateNextLevel();
 		//CurrentPos.BAttackedSquares;
 	}
-	void DiagnosticPrint()
+	void PositionGenerator::DiagnosticPrint()
 	{
+		cout << endl << "Current Pos:         Ref Pos:" << endl;
 		for (int i = 0; i < 8; i++)
 		{
 			for (int j = 0; j < 8; j++)
 			{
 				cout << CurrentPos->ChessBoard[i][j] << " ";
 			}
+			cout << "     ";
+			for (int j = 0; j < 8; j++)
+			{
+				cout << ReferencePos->ChessBoard[i][j] << " ";
+			}
 			cout << endl;
 		}
-		cout << endl;
+		/*cout << endl << "Ref Pos:" << endl;
 		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				cout << ReferencePos->ChessBoard[i][j] << " ";
+			}
+			cout << endl;
+		}*/
+		cout << endl;
+		/*for (int i = 0; i < 8; i++)
 		{
 			for (int j = 0; j < 8; j++)
 			{
@@ -38,9 +51,9 @@ public:
 				cout << CurrentPos->WAttackedSquares[i][j] << " ";
 			}
 			cout << endl;
-		}
+		}*/
 	}
-	void GenerateNextLevel()
+	void PositionGenerator::GenerateNextLevel()
 	{
 		ChessPosition Positions = *CurrentPos; ///////////////////////////
 		int xAsis, yAsis;
@@ -145,7 +158,7 @@ public:
 								}
 							}
 						}
-						if (xAsis - 2 >= 8)
+						if (xAsis - 2 >= 0)
 						{
 							if (yAsis + 1 < 8)
 							{
@@ -384,14 +397,14 @@ public:
 						{
 							if (Positions.ChessBoard[yAsis - 1][xAsis] == ' ' && Positions.ChessBoard[yAsis - 2][xAsis] == ' ')
 							{
-								AddNextMove(j, i, j, i - 2);
+								AddNextMovePawn(j, i, j, i - 2);
 							}
 						}
 						if (yAsis > 1)
 						{
 							if (Positions.ChessBoard[yAsis - 1][xAsis] == ' ')
 							{
-								AddNextMove(j, i, j, i - 1);
+								AddNextMovePawn(j, i, j, i - 1);
 							}
 							if (xAsis + 1 < 8)
 							{
@@ -780,14 +793,14 @@ public:
 						{
 							if (Positions.ChessBoard[yAsis + 1][xAsis] == ' ' && Positions.ChessBoard[yAsis + 2][xAsis] == ' ')
 							{
-								AddNextMove(j, i, j, i + 2);
+								AddNextMovePawn(j, i, j, i + 2);
 							}
 						}
 						if (yAsis < 6)
 						{
 							if (Positions.ChessBoard[yAsis + 1][xAsis] == ' ')
 							{
-								AddNextMove(j, i, j, i + 1);
+								AddNextMovePawn(j, i, j, i + 1);
 							}
 							if (xAsis + 1 < 8)
 							{
@@ -836,7 +849,7 @@ public:
 			}
 		}
 	}
-	bool KingCheck(ChessPosition CP, int j = -1, int i = -1)
+	bool PositionGenerator::KingCheck(ChessPosition CP, int j = -1, int i = -1)
 	{
 		int x, y;
 		if (!CP.Turn)
@@ -1090,7 +1103,7 @@ public:
 							{
 								return true; //////////////////
 							}
-							else if (CP.ChessBoard[i][x] > 91) break;
+							else if (CP.ChessBoard[i][x] != ' ') break;
 						}
 						for (x = j - 1; x >= 0; x--)
 						{
@@ -1098,7 +1111,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[i][x] > 91) break;
+							else if (CP.ChessBoard[i][x] != ' ') break;
 						}
 						for (y = i + 1; y < 8; y++)
 						{
@@ -1106,7 +1119,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][j] > 91) break;
+							else if (CP.ChessBoard[y][j] != ' ') break;
 						}
 						for (y = i - 1; y >= 0; y--)
 						{
@@ -1114,7 +1127,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][j] > 91) break;
+							else if (CP.ChessBoard[y][j] != ' ') break;
 						}
 						x = j + 1;
 						y = i + 1;
@@ -1124,7 +1137,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][x] > 91) break;
+							else if (CP.ChessBoard[y][x] != ' ') break;
 							x++;
 							y++;
 						}
@@ -1136,7 +1149,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][x] > 91) break;
+							else if (CP.ChessBoard[y][x] != ' ') break;
 							x--;
 							y--;
 						}
@@ -1148,7 +1161,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][x] > 91) break;
+							else if (CP.ChessBoard[y][x] != ' ') break;
 							x--;
 							y++;
 						}
@@ -1160,7 +1173,7 @@ public:
 							{
 								return true;
 							}
-							else if (CP.ChessBoard[y][x] > 91) break;
+							else if (CP.ChessBoard[y][x] != ' ') break;
 							x++;
 							y--;
 						}
@@ -1305,10 +1318,46 @@ public:
 		}
 		return false;
 	}
-	void AddNextMove(int x, int y, int x1, int y1)
+	void PositionGenerator::AddNextMove(int x, int y, int x1, int y1)
 	{
 		ChessPosition tempPos = *CurrentPos;
+		char Fig = tempPos.ChessBoard[y1][x1];
 		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
+		switch (Fig)
+		{
+		case 'Q':
+			tempPos.valuation -= 90;
+			break;
+		case 'R':
+			tempPos.valuation -= 50;
+			break;
+		case 'B':
+			tempPos.valuation -= 30;
+			break;
+		case 'N':
+			tempPos.valuation -= 30;
+			break;
+		case 'P':
+			tempPos.valuation -= 10;
+			break;
+		case 'q':
+			tempPos.valuation += 90;
+			break;
+		case 'r':
+			tempPos.valuation += 50;
+			break;
+		case 'b':
+			tempPos.valuation += 30;
+			break;
+		case 'n':
+			tempPos.valuation += 30;
+			break;
+		case 'p':
+			tempPos.valuation += 10;
+			break;
+		default:
+			break;
+		}
 		if (tempPos.ChessBoard[y][x] == 'r') //////////////////////// Can be placed in special function
 		{
 			
@@ -1352,8 +1401,29 @@ public:
 		{
 			tempPos.EnPass = true;
 		}
-		if (CurrentPos->Turn) tempPos.Turn = false; ////////////////////////////////////////////
-		else tempPos.Turn = true;
+		//if (CurrentPos->Turn) tempPos.Turn = false; ////////////////////////////////////////////
+		tempPos.Turn = !CurrentPos->Turn;
+		if (!KingCheck(tempPos)) // Check if king is in check.
+		{
+			tempPos.NextPositions.clear();
+			string a = { char(x + 97), char(8 - y + 48), char(x1 + 97), char(8 - y1 + 48) };
+			tempPos.LastMove = a;
+			tempPos.PreviousPosition = CurrentPos;
+			CurrentPos->NextPositions.emplace_back(tempPos);
+		}
+	}
+	void PositionGenerator::AddNextMovePawn(int x, int y, int x1, int y1)
+	{
+		ChessPosition tempPos = *CurrentPos;
+		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
+		tempPos.ChessBoard[y][x] = ' ';
+		tempPos.EnPass = false;
+		if ((y - y1 == 2 || y - y1 == -2))
+		{
+			tempPos.EnPass = true;
+		}
+		//if (CurrentPos->Turn) tempPos.Turn = false; ////////////////////////////////////////////
+		tempPos.Turn = !CurrentPos->Turn;
 		if (!KingCheck(tempPos)) // Check if king is in check.
 		{
 			tempPos.NextPositions.clear();
@@ -1367,7 +1437,7 @@ public:
 	/// 
 	/// </summary>
 	/// <param name="opt">0 - Black Long, 1 - Black Short, 2 - White Long, 3 - White Short</param>
-	void AddNextMoveCas(int opt)
+	void PositionGenerator::AddNextMoveCas(int opt)
 	{
 		
 		int RX, RY, KX, KY, RXTo, RYTo, KXTo, KYTo;
@@ -1429,11 +1499,19 @@ public:
 		tempPos.PreviousPosition = CurrentPos;
 		CurrentPos->NextPositions.emplace_back(tempPos);
 	}
-	void AddNextMoveEnPassant(int x, int y, int x1, int y1)
+	void PositionGenerator::AddNextMoveEnPassant(int x, int y, int x1, int y1)
 	{
 		ChessPosition tempPos = *CurrentPos;
 		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
 		tempPos.ChessBoard[y][x] = ' ';
+		if (tempPos.ChessBoard[y][x1] == 'p')
+		{
+			tempPos.valuation += 10;
+		}
+		else
+		{
+			tempPos.valuation -= 10;
+		}
 		tempPos.ChessBoard[y][x1] = ' ';
 		tempPos.EnPass = false;
 		if (CurrentPos->Turn) tempPos.Turn = false; ////////////////////////////////////////////
@@ -1447,7 +1525,7 @@ public:
 			CurrentPos->NextPositions.emplace_back(tempPos);
 		}
 	}
-	void AddNextMoveProm(int x, int y, int x1, int y1, char Fig)
+	void PositionGenerator::AddNextMoveProm(int x, int y, int x1, int y1, char Fig)
 	{
 		ChessPosition tempPos = *CurrentPos;
 		tempPos.ChessBoard[y1][x1] = Fig;
@@ -1456,6 +1534,35 @@ public:
 		{
 			tempPos.Turn = false; ////////////////////////////////////////////
 			Fig += 32;
+			switch (Fig)
+			{
+			case 'Q':
+				tempPos.valuation += 80;
+				break;
+			case 'R':
+				tempPos.valuation += 40;
+				break;
+			case 'B':
+				tempPos.valuation += 20;
+				break;
+			case 'N':
+				tempPos.valuation += 20;
+				break;
+			case 'q':
+				tempPos.valuation -= 80;
+				break;
+			case 'r':
+				tempPos.valuation -= 40;
+				break;
+			case 'b':
+				tempPos.valuation -= 20;
+				break;
+			case 'n':
+				tempPos.valuation -= 20;
+				break;
+			default:
+				break;
+			}
 		}
 		else tempPos.Turn = true;
 		if (!KingCheck(tempPos)) // Check if king is in check.
@@ -1467,45 +1574,107 @@ public:
 			CurrentPos->NextPositions.emplace_back(tempPos);
 		}
 	}
-	string GetMove()  //////////////////////////////////////
+	string PositionGenerator::GetMove()  //////////////////////////////////////
 	{
-		if (CurrentPos->NextPositions.size() == 0) // If there are no next positions those needs to be calculated
+		if (ReferencePos->NextPositions.size() == 0) // If there are no next positions those needs to be calculated
 		{
+			CurrentPos = ReferencePos;
 			GenerateNextLevel();
+			if (ReferencePos->NextPositions.size() == 0) return "bad";
 		}
-		string tempMove;
-		if (CurrentPos->NextPositions.size() > 0)
+		vector<string> Bmoves;
+		int Val = ReferencePos->NextPositions[0].valuation;
+		if (ReferencePos->Turn)
+		{
+			for (int i = 0; i < ReferencePos->NextPositions.size(); i++)
+			{
+				if (Val < ReferencePos->NextPositions[i].valuation)
+				{
+					Val = ReferencePos->NextPositions[i].valuation;
+				}
+			}	
+		}
+		else
+		{
+			for (int i = 0; i < ReferencePos->NextPositions.size(); i++)
+			{
+				if (Val > ReferencePos->NextPositions[i].valuation)
+				{
+					Val = ReferencePos->NextPositions[i].valuation;
+				}
+			}
+		}
+		for (int i = 0; i < ReferencePos->NextPositions.size(); i++)
+		{
+			if (Val == ReferencePos->NextPositions[i].valuation)
+			{
+				Bmoves.emplace_back(ReferencePos->NextPositions[i].LastMove);
+			}
+		}
+		srand(time(NULL));
+		auto r = rand() % Bmoves.size();
+		return Bmoves[r];
+		/*if (CurrentPos->NextPositions.size() > 0)
 		{
 			srand(time(NULL));
 			auto r = rand() % CurrentPos->NextPositions.size();
 			tempMove = CurrentPos->NextPositions[r].LastMove;
-		}
-		return tempMove;
+		}*/
 	}
-	void Move(string Move)
+	void PositionGenerator::Move(string Move)
 	{
-		if (CurrentPos->NextPositions.size() == 0) // If there are no next positions those needs to be calculated
+		if (ReferencePos->NextPositions.size() == 0) // If there are no next positions those needs to be calculated
 		{
+			CurrentPos = ReferencePos;
 			GenerateNextLevel();
 		}
-		for (int i = 0; i < CurrentPos->NextPositions.size(); i++) // Searching for legal move
+		if (ReferencePos->Purged)
 		{
-			if (CurrentPos->NextPositions[i].LastMove == Move)
+			ReferencePos->NextPositions.clear();
+			CurrentPos = ReferencePos;
+			GenerateNextLevel();
+			ReferencePos->Purged = false;
+		}
+		for (int i = 0; i < ReferencePos->NextPositions.size();) // Searching for legal move
+		{
+			if (ReferencePos->NextPositions[i].LastMove != Move)
 			{
-				CurrentPos = &CurrentPos->NextPositions[i];
-				return;
+				ReferencePos->NextPositions.erase(ReferencePos->NextPositions.begin() + i);
+				//CurrentPos = &CurrentPos->NextPositions[i];
+				//ReferencePos = CurrentPos;
+				//return;
+			}
+			else
+			{
+				i++;
 			}
 		}
+		ReferencePos->Purged = true;
+		ReferencePos = &ReferencePos->NextPositions[0];
+		CurrentPos = ReferencePos;
+		return;
+		/*if (CurrentPos->NextPositions[0].LastMove == Move)
+		{
+			CurrentPos = &CurrentPos->NextPositions[0];
+			return;
+		}*/
 	}
-	void Reset()
+	void PositionGenerator::SyncAnalyzeMove()
+	{
+		CurrentPos = ReferencePos;
+	}
+	bool PositionGenerator::CheckAnalyzeSync()
+	{
+		if (CurrentPos == ReferencePos) return true;
+		else return false;
+	}
+	void PositionGenerator::Reset()
 	{
 		CurrentPos = Start;
+		ReferencePos = Start;
 	}
-	~PositionGenerator()
+	PositionGenerator::~PositionGenerator()
 	{
 
 	}
-
-private:
-	ChessPosition* CurrentPos,* Start;
-};
+	

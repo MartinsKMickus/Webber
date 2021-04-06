@@ -1,5 +1,6 @@
 #pragma once
-#include "Generator.cpp"
+#include "Core.h"
+#include "Generator.h"
 
 class UCIcom
 {

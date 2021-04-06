@@ -4,8 +4,10 @@
 #include <future>
 #include <thread>
 #include <Windows.h>
+#include <atomic>
 
 using namespace std;
+
 
 //char ChessBoard[8][8] = { 'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r',
 //
@@ -43,27 +45,27 @@ struct ChessPosition
 
 							  'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R' };
 
-	bool WAttackedSquares[8][8] = { 0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, 0, 0, 0, 0,
-								   1, 1, 1, 1, 1, 1, 1, 1,
-								   1, 1, 1, 1, 1, 1, 1, 1,
-								   0, 1, 1, 1, 1, 1, 1, 0 }, ///////////////// Will not be used.
+	//bool WAttackedSquares[8][8] = { 0, 0, 0, 0, 0, 0, 0, 0,
+	//							   0, 0, 0, 0, 0, 0, 0, 0,
+	//							   0, 0, 0, 0, 0, 0, 0, 0,
+	//							   0, 0, 0, 0, 0, 0, 0, 0,
+	//							   0, 0, 0, 0, 0, 0, 0, 0,
+	//							   1, 1, 1, 1, 1, 1, 1, 1,
+	//							   1, 1, 1, 1, 1, 1, 1, 1,
+	//							   0, 1, 1, 1, 1, 1, 1, 0 }, ///////////////// Will not be used.
 
-		BAttackedSquares[8][8] = { 0, 1, 1, 1, 1, 1, 1, 0,
-								   1, 1, 1, 1, 1, 1, 1, 1,
-								   1, 1, 1, 1, 1, 1, 1, 1,
-								   0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, 0, 0, 0, 0 }, ///////////////// Will not be used.
-		BInCheck = 0, WInCheck = 0, Turn = 1;
+	//	BAttackedSquares[8][8] = { 0, 1, 1, 1, 1, 1, 1, 0,
+	//							   1, 1, 1, 1, 1, 1, 1, 1,
+	//							   1, 1, 1, 1, 1, 1, 1, 1,
+	//							   0, 0, 0, 0, 0, 0, 0, 0,
+	//							   0, 0, 0, 0, 0, 0, 0, 0,
+	//							   0, 0, 0, 0, 0, 0, 0, 0,
+	//							   0, 0, 0, 0, 0, 0, 0, 0,
+	//							   0, 0, 0, 0, 0, 0, 0, 0 }, ///////////////// Will not be used.
+	bool BInCheck = 0, WInCheck = 0, Turn = 1;
 	vector<ChessPosition> NextPositions;
 	ChessPosition* PreviousPosition = NULL;
 	string LastMove;
 	int valuation = 0, WKing[2] = { 7,4 }, BKing[2] = { 0,4 };
-	bool WC = true, Wc = true, BC = true, Bc = true, EnPass = false;
+	bool WC = true, Wc = true, BC = true, Bc = true, EnPass = false, Purged = NULL;
 };
