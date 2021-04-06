@@ -37,11 +37,11 @@ void GetBestMoveTime(PositionGenerator& PG, string& bMove)
 {
 	Valuation v(PG);
 	//int temp = -1000;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
+		v.Reset();
 		v.TimeAnalysis(i);
 	}
-	
 	bMove = PG.GetMove();
 	cout << "info score cp ";
 	if (PG.CurrentPos->Turn) cout << PG.CurrentPos->valuation;
@@ -54,6 +54,7 @@ void GetBestMoveDepth(PositionGenerator& PG, string& bMove, int depth)
 	//int temp = -1000;
 	for (int i = 0; i < depth; i++)
 	{
+		v.Reset();
 		v.TimeAnalysis(i);
 	}
 
@@ -62,6 +63,7 @@ void GetBestMoveDepth(PositionGenerator& PG, string& bMove, int depth)
 	if (PG.CurrentPos->Turn) cout << PG.CurrentPos->valuation;
 	else cout << -PG.CurrentPos->valuation;
 	cout << "\n";
+	cout << "Possible pos: " << v.possiblePos << endl;
 }
 void CallAnalyseWait(PositionGenerator& PG, int ms)
 {
@@ -113,7 +115,8 @@ void UCIcom::Run()
 		}
 		else if (LastWord == "position")
 		{
-			if (ExtractFW(input) == "startpos")
+			LastWord = ExtractFW(input);
+			if (LastWord == "startpos")
 			{
 				if (ExtractFW(input) == "moves")
 				{
@@ -124,8 +127,11 @@ void UCIcom::Run()
 					}
 				}
 			}
-			else
+			else if (LastWord == "fen")
 			{
+				input.erase();
+			}
+			else{
 				input.erase();
 			}
 		}

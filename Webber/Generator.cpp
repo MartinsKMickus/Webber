@@ -11,15 +11,29 @@
 	}
 	void PositionGenerator::DiagnosticPrint()
 	{
-		cout << endl;
+		cout << endl << "Current Pos:         Ref Pos:" << endl;
 		for (int i = 0; i < 8; i++)
 		{
 			for (int j = 0; j < 8; j++)
 			{
 				cout << CurrentPos->ChessBoard[i][j] << " ";
 			}
+			cout << "     ";
+			for (int j = 0; j < 8; j++)
+			{
+				cout << ReferencePos->ChessBoard[i][j] << " ";
+			}
 			cout << endl;
 		}
+		/*cout << endl << "Ref Pos:" << endl;
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				cout << ReferencePos->ChessBoard[i][j] << " ";
+			}
+			cout << endl;
+		}*/
 		cout << endl;
 		/*for (int i = 0; i < 8; i++)
 		{
@@ -1401,7 +1415,6 @@
 	void PositionGenerator::AddNextMovePawn(int x, int y, int x1, int y1)
 	{
 		ChessPosition tempPos = *CurrentPos;
-		char Fig = tempPos.ChessBoard[y1][x1];
 		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
 		tempPos.ChessBoard[y][x] = ' ';
 		tempPos.EnPass = false;
@@ -1563,38 +1576,39 @@
 	}
 	string PositionGenerator::GetMove()  //////////////////////////////////////
 	{
-		if (CurrentPos->NextPositions.size() == 0) // If there are no next positions those needs to be calculated
+		if (ReferencePos->NextPositions.size() == 0) // If there are no next positions those needs to be calculated
 		{
+			CurrentPos = ReferencePos;
 			GenerateNextLevel();
-			if (CurrentPos->NextPositions.size() == 0) return "bad";
+			if (ReferencePos->NextPositions.size() == 0) return "bad";
 		}
 		vector<string> Bmoves;
-		int Val = CurrentPos->NextPositions[0].valuation;
-		if (CurrentPos->Turn)
+		int Val = ReferencePos->NextPositions[0].valuation;
+		if (ReferencePos->Turn)
 		{
-			for (int i = 0; i < CurrentPos->NextPositions.size(); i++)
+			for (int i = 0; i < ReferencePos->NextPositions.size(); i++)
 			{
-				if (Val < CurrentPos->NextPositions[i].valuation)
+				if (Val < ReferencePos->NextPositions[i].valuation)
 				{
-					Val = CurrentPos->NextPositions[i].valuation;
+					Val = ReferencePos->NextPositions[i].valuation;
 				}
 			}	
 		}
 		else
 		{
-			for (int i = 0; i < CurrentPos->NextPositions.size(); i++)
+			for (int i = 0; i < ReferencePos->NextPositions.size(); i++)
 			{
-				if (Val > CurrentPos->NextPositions[i].valuation)
+				if (Val > ReferencePos->NextPositions[i].valuation)
 				{
-					Val = CurrentPos->NextPositions[i].valuation;
+					Val = ReferencePos->NextPositions[i].valuation;
 				}
 			}
 		}
-		for (int i = 0; i < CurrentPos->NextPositions.size(); i++)
+		for (int i = 0; i < ReferencePos->NextPositions.size(); i++)
 		{
-			if (Val == CurrentPos->NextPositions[i].valuation)
+			if (Val == ReferencePos->NextPositions[i].valuation)
 			{
-				Bmoves.emplace_back(CurrentPos->NextPositions[i].LastMove);
+				Bmoves.emplace_back(ReferencePos->NextPositions[i].LastMove);
 			}
 		}
 		srand(time(NULL));
@@ -1609,21 +1623,23 @@
 	}
 	void PositionGenerator::Move(string Move)
 	{
-		if (CurrentPos->NextPositions.size() == 0) // If there are no next positions those needs to be calculated
+		if (ReferencePos->NextPositions.size() == 0) // If there are no next positions those needs to be calculated
 		{
+			CurrentPos = ReferencePos;
 			GenerateNextLevel();
 		}
-		if (CurrentPos->Purged)
+		if (ReferencePos->Purged)
 		{
-			CurrentPos->NextPositions.clear();
+			ReferencePos->NextPositions.clear();
+			CurrentPos = ReferencePos;
 			GenerateNextLevel();
-			CurrentPos->Purged = false;
+			ReferencePos->Purged = false;
 		}
-		for (int i = 0; i < CurrentPos->NextPositions.size();) // Searching for legal move
+		for (int i = 0; i < ReferencePos->NextPositions.size();) // Searching for legal move
 		{
-			if (CurrentPos->NextPositions[i].LastMove != Move)
+			if (ReferencePos->NextPositions[i].LastMove != Move)
 			{
-				CurrentPos->NextPositions.erase(CurrentPos->NextPositions.begin() + i);
+				ReferencePos->NextPositions.erase(ReferencePos->NextPositions.begin() + i);
 				//CurrentPos = &CurrentPos->NextPositions[i];
 				//ReferencePos = CurrentPos;
 				//return;
@@ -1633,9 +1649,9 @@
 				i++;
 			}
 		}
-		CurrentPos->Purged = true;
-		CurrentPos = &CurrentPos->NextPositions[0];
-		ReferencePos = CurrentPos;
+		ReferencePos->Purged = true;
+		ReferencePos = &ReferencePos->NextPositions[0];
+		CurrentPos = ReferencePos;
 		return;
 		/*if (CurrentPos->NextPositions[0].LastMove == Move)
 		{
@@ -1655,6 +1671,7 @@
 	void PositionGenerator::Reset()
 	{
 		CurrentPos = Start;
+		ReferencePos = Start;
 	}
 	PositionGenerator::~PositionGenerator()
 	{
