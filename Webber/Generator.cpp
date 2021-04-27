@@ -4,6 +4,7 @@
 	PositionGenerator::PositionGenerator()
 	{
 		CurrentPos = new ChessPosition();
+		SavedFEN = "";
 		Start = CurrentPos;
 		ReferencePos = CurrentPos;
 		GenerateNextLevel();
@@ -11,9 +12,14 @@
 	}
 	void PositionGenerator::DiagnosticPrint()
 	{
-		cout << endl << "Current Pos:         Ref Pos:" << endl;
+		cout << endl << "Start:               Current Pos:         Ref Pos:" << endl;
 		for (int i = 0; i < 8; i++)
 		{
+			for (int j = 0; j < 8; j++)
+			{
+				cout << Start->ChessBoard[i][j] << " ";
+			}
+			cout << "     ";
 			for (int j = 0; j < 8; j++)
 			{
 				cout << CurrentPos->ChessBoard[i][j] << " ";
@@ -444,6 +450,26 @@
 								AddNextMoveProm(j, i, j, i - 1, 'B');
 								AddNextMoveProm(j, i, j, i - 1, 'N');
 							}
+							if (xAsis + 1 < 8)
+							{
+								if (Positions.ChessBoard[yAsis - 1][xAsis + 1] > 91 && Positions.ChessBoard[yAsis - 1][xAsis + 1] != ' ') //////////////////
+								{
+									AddNextMoveProm(j, i, j + 1, i - 1, 'Q');
+									AddNextMoveProm(j, i, j + 1, i - 1, 'R');
+									AddNextMoveProm(j, i, j + 1, i - 1, 'B');
+									AddNextMoveProm(j, i, j + 1, i - 1, 'N');
+								}
+							}
+							if (xAsis - 1 >= 0)
+							{
+								if (Positions.ChessBoard[yAsis - 1][xAsis - 1] > 91 && Positions.ChessBoard[yAsis - 1][xAsis - 1] != ' ') /////////////////
+								{
+									AddNextMoveProm(j, i, j - 1, i - 1, 'Q');
+									AddNextMoveProm(j, i, j - 1, i - 1, 'R');
+									AddNextMoveProm(j, i, j - 1, i - 1, 'B');
+									AddNextMoveProm(j, i, j - 1, i - 1, 'N');
+								}
+							}
 						}
 						break;
 					default:
@@ -840,6 +866,26 @@
 								AddNextMoveProm(j, i, j, i + 1, 'b');
 								AddNextMoveProm(j, i, j, i + 1, 'n');
 							}
+							if (xAsis + 1 < 8)
+							{
+								if (Positions.ChessBoard[yAsis + 1][xAsis + 1] < 91 && Positions.ChessBoard[yAsis + 1][xAsis + 1] != ' ') //////////////////
+								{
+									AddNextMoveProm(j, i, j + 1, i - 1, 'q');
+									AddNextMoveProm(j, i, j + 1, i - 1, 'r');
+									AddNextMoveProm(j, i, j + 1, i - 1, 'b');
+									AddNextMoveProm(j, i, j + 1, i - 1, 'n');
+								}
+							}
+							if (xAsis - 1 >= 0)
+							{
+								if (Positions.ChessBoard[yAsis + 1][xAsis - 1] < 91 && Positions.ChessBoard[yAsis + 1][xAsis - 1] != ' ') /////////////////
+								{
+									AddNextMoveProm(j, i, j - 1, i - 1, 'q');
+									AddNextMoveProm(j, i, j - 1, i - 1, 'r');
+									AddNextMoveProm(j, i, j - 1, i - 1, 'b');
+									AddNextMoveProm(j, i, j - 1, i - 1, 'n');
+								}
+							}
 						}
 						break;
 					default:
@@ -849,7 +895,7 @@
 			}
 		}
 	}
-	bool PositionGenerator::KingCheck(ChessPosition CP, int j = -1, int i = -1)
+	bool PositionGenerator::KingCheck(ChessPosition& CP, int j = -1, int i = -1)
 	{
 		int x, y;
 		if (!CP.Turn)
@@ -1320,8 +1366,47 @@
 	}
 	void PositionGenerator::AddNextMove(int x, int y, int x1, int y1)
 	{
-		ChessPosition tempPos = *CurrentPos;
+		//ChessPosition tempPos = *CurrentPos;
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				tempPos.ChessBoard[i][j] = CurrentPos->ChessBoard[i][j];
+			}
+		}
+		tempPos.BC = CurrentPos->BC;
+		tempPos.Bc = CurrentPos->Bc;
+		tempPos.WC = CurrentPos->WC;
+		tempPos.Wc = CurrentPos->Wc;
+		tempPos.BKing[0] = CurrentPos->BKing[0];
+		tempPos.BKing[1] = CurrentPos->BKing[1];
+		tempPos.WKing[0] = CurrentPos->WKing[0];
+		tempPos.WKing[1] = CurrentPos->WKing[1];
+		tempPos.valuation = CurrentPos->valuation;
 		char Fig = tempPos.ChessBoard[y1][x1];
+		if (tempPos.ChessBoard[y1][x1] == 'r') //////////////////////// Can be placed in special function
+		{
+
+			if (x1 == 0 && y1 == 0)
+			{
+				tempPos.BC = false;
+			}
+			if (x1 == 7 && y1 == 0)
+			{
+				tempPos.Bc = false;
+			}
+		}
+		else if (tempPos.ChessBoard[y1][x1] == 'R') //////////////////////// Can be placed in special function
+		{
+			if (x1 == 0 && y1 == 7)
+			{
+				tempPos.WC = false;
+			}
+			if (x1 == 7 && y1 == 7)
+			{
+				tempPos.Wc = false;
+			}
+		}
 		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
 		switch (Fig)
 		{
@@ -1414,7 +1499,23 @@
 	}
 	void PositionGenerator::AddNextMovePawn(int x, int y, int x1, int y1)
 	{
-		ChessPosition tempPos = *CurrentPos;
+		//tempPos = *CurrentPos;
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				tempPos.ChessBoard[i][j] = CurrentPos->ChessBoard[i][j];
+			}
+		}
+		tempPos.BC = CurrentPos->BC;
+		tempPos.Bc = CurrentPos->Bc;
+		tempPos.WC = CurrentPos->WC;
+		tempPos.Wc = CurrentPos->Wc;
+		tempPos.BKing[0] = CurrentPos->BKing[0];
+		tempPos.BKing[1] = CurrentPos->BKing[1];
+		tempPos.WKing[0] = CurrentPos->WKing[0];
+		tempPos.WKing[1] = CurrentPos->WKing[1];
+		tempPos.valuation = CurrentPos->valuation;
 		tempPos.ChessBoard[y1][x1] = tempPos.ChessBoard[y][x];
 		tempPos.ChessBoard[y][x] = ' ';
 		tempPos.EnPass = false;
@@ -1508,10 +1609,11 @@
 		{
 			tempPos.valuation += 10;
 		}
-		else
+		else if (tempPos.ChessBoard[y][x1] == 'P')
 		{
 			tempPos.valuation -= 10;
 		}
+		else return;
 		tempPos.ChessBoard[y][x1] = ' ';
 		tempPos.EnPass = false;
 		if (CurrentPos->Turn) tempPos.Turn = false; ////////////////////////////////////////////
@@ -1670,11 +1772,124 @@
 	}
 	void PositionGenerator::Reset()
 	{
+		if (SavedFEN != "")
+		{
+			SavedFEN = "";
+			Start->NextPositions.clear();
+			delete Start;
+			Start = new ChessPosition;
+		}
 		CurrentPos = Start;
 		ReferencePos = Start;
 	}
+	void PositionGenerator::ResetFen(string FEN)
+	{
+		if (FEN != SavedFEN)
+		{
+			int skip = 0, wpos = 0;
+			char active;
+			for (int i = 0; i < 8; i++)
+			{
+				for (int j = 0; j < 8; j++)
+				{
+					Start->ChessBoard[i][j] = ' ';
+					if (skip == 0)
+					{
+						active = FEN[wpos];
+						if (active == '/')
+						{
+							active = FEN[++wpos];
+						}
+						switch (active)
+						{
+						case '1':
+
+							break;
+						case '2':
+							skip = 1;
+							break;
+						case '3':
+							skip = 2;
+							break;
+						case '4':
+							skip = 3;
+							break;
+						case '5':
+							skip = 4;
+							break;
+						case '6':
+							skip = 5;
+							break;
+						case '7':
+							skip = 6;
+							break;
+						case '8':
+							skip = 7;
+							break;
+						default:
+							if (active == 'k')
+							{
+								Start->BKing[0] = i;
+								Start->BKing[1] = j;
+							}
+							else if (active == 'K')
+							{
+								Start->WKing[0] = i;
+								Start->WKing[1] = j;
+							}
+							Start->ChessBoard[i][j] = active;
+							break;
+						}
+						wpos++;
+					}
+					else
+					{
+						skip--;
+					}
+				}
+			}
+			wpos++;
+			if (FEN[wpos++] == 'w')
+			{
+				Start->Turn = true;
+			}
+			else
+			{
+				Start->Turn = false;
+			}
+			Start->BC = false;
+			Start->Bc = false;
+			Start->WC = false;
+			Start->Wc = false;
+			while (FEN[++wpos] != ' ')
+			{
+				switch (FEN[wpos])
+				{
+				case 'K':
+					Start->Wc = true;
+					break;
+				case 'k':
+					Start->Bc = true;
+					break;
+				case 'Q':
+					Start->WC = true;
+					break;
+				case 'q':
+					Start->BC = true;
+					break;
+				default:
+					break;
+				}
+			}
+			Start->NextPositions.clear();
+			SavedFEN = FEN;
+		}
+		ReferencePos = Start;
+		CurrentPos = Start;
+	}
 	PositionGenerator::~PositionGenerator()
 	{
-
+		Start->NextPositions.clear();
+		delete Start;
 	}
 	

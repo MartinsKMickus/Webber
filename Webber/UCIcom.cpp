@@ -37,11 +37,13 @@ void GetBestMoveTime(PositionGenerator& PG, string& bMove)
 {
 	Valuation v(PG);
 	//int temp = -1000;
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		v.Reset();
 		v.TimeAnalysis(i);
+		
 	}
+	//PG.SyncAnalyzeMove();
 	bMove = PG.GetMove();
 	cout << "info score cp ";
 	if (PG.CurrentPos->Turn) cout << PG.CurrentPos->valuation;
@@ -56,8 +58,9 @@ void GetBestMoveDepth(PositionGenerator& PG, string& bMove, int depth)
 	{
 		v.Reset();
 		v.TimeAnalysis(i);
+		
 	}
-
+	//PG.SyncAnalyzeMove();
 	bMove = PG.GetMove();
 	cout << "info score cp ";
 	if (PG.CurrentPos->Turn) cout << PG.CurrentPos->valuation;
@@ -129,7 +132,24 @@ void UCIcom::Run()
 			}
 			else if (LastWord == "fen")
 			{
-				input.erase();
+				LastWord = "";
+				string add;
+				
+				LastWord += ExtractFW(input) + " ";
+				LastWord += ExtractFW(input) + " ";
+				LastWord += ExtractFW(input) + " ";
+				LastWord += ExtractFW(input) + " ";
+				LastWord += ExtractFW(input) + " ";
+				LastWord += ExtractFW(input);
+				engine.ResetFen(LastWord);
+				if (ExtractFW(input) == "moves")
+				{
+					
+					for (LastWord = ExtractFW(input); LastWord.size() > 0; LastWord = ExtractFW(input))
+					{
+						engine.Move(LastWord); /////////////////////////
+					}
+				}
 			}
 			else{
 				input.erase();

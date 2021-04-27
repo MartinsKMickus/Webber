@@ -50,6 +50,7 @@ void Valuation::TimeAnalysis(int depth = 0)
 				}
 			}
 		}
+		
 		possiblePos += engine->CurrentPos->NextPositions.size();
 
 		
@@ -83,6 +84,7 @@ void Valuation::TimeAnalysis(int depth = 0)
 		for (int i = 0; i < engine->CurrentPos->NextPositions.size(); i++)
 		{
 			engine->CurrentPos = &engine->CurrentPos->NextPositions[i];
+			//cout << engine->CurrentPos->LastMove << ": 1\n";
 			TimeAnalysis(depth - 1);
 		}
 	}

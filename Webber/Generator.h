@@ -7,7 +7,7 @@ public:
 	PositionGenerator();
 	void DiagnosticPrint();
 	void GenerateNextLevel();
-	bool KingCheck(ChessPosition CP, int j, int i);
+	bool KingCheck(ChessPosition& CP, int j, int i);
 	void AddNextMove(int x, int y, int x1, int y1);
 	void AddNextMovePawn(int x, int y, int x1, int y1);
 	void AddNextMoveCas(int opt);
@@ -18,8 +18,10 @@ public:
 	void SyncAnalyzeMove();
 	bool CheckAnalyzeSync();
 	void Reset();
+	void ResetFen(string FEN);
 	~PositionGenerator();
 	ChessPosition* CurrentPos;
 private:
-	ChessPosition* Start, * ReferencePos;
+	ChessPosition* Start, *ReferencePos, tempPos;
+	string SavedFEN = "";
 };
